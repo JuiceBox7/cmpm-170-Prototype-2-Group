@@ -4,7 +4,8 @@
 - Julian Lara  
 - Anna Schultz  
 - Justin Park  
-- Connor Lynch
+- Connor Lynch  
+- Elia Hawley
 
 # Prototype description
 An arcade style shooter prototype.
