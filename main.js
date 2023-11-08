@@ -30,12 +30,10 @@ llllll
   ll
 `,
   `
-  lll
- l l l
- llll
- llll
-llll
-l l l
+  lllll
+  l l l
+ lllllll
+lllllllll
 `,
   `
   lll
@@ -157,38 +155,38 @@ function update() {
       return true;
     }
   });
-  if((player.x - enemy.x) <= (player.y-enemy.y)){
-    if(enemy.x>player.x+1){
-    enemy.x-=.6
-    enemy.mn=1
-    }else if(enemy.x<player.x-1){
-        enemy.x+=.6
-        enemy.mn=1
+      if((player.x - enemy.x) <= (player.y-enemy.y)){
+      if(enemy.x>player.x+1){
+      enemy.x-=.6
+      enemy.mn=1
+      }else if(enemy.x<player.x-1){
+          enemy.x+=.6
+          enemy.mn=1
+      }else{
+        if(enemy.y>player.y){
+          enemy.y-=.6
+          enemy.mn=0
+      }else if(enemy.y<player.y){
+          enemy.y+=.6
+          enemy.mn=0
+      }
+      } 
     }else{
-      if(enemy.y>player.y){
+      if(enemy.y>player.y+1){
         enemy.y-=.6
         enemy.mn=0
-    }else if(enemy.y<player.y){
+    }else if(enemy.y<player.y-1){
         enemy.y+=.6
         enemy.mn=0
+    }else if(enemy.x>player.x){
+      enemy.x-=.6
+      enemy.mn=1
+      }else if(enemy.x<player.x){
+          enemy.x+=.6
+          enemy.mn=1
     }
-    } 
-  }else{
-    if(enemy.y>player.y+1){
-      enemy.y-=.6
-      enemy.mn=0
-  }else if(enemy.y<player.y-1){
-      enemy.y+=.6
-      enemy.mn=0
-  }else if(enemy.x>player.x){
-    enemy.x-=.6
-    enemy.mn=1
-    }else if(enemy.x<player.x){
-        enemy.x+=.6
-        enemy.mn=1
   }
-}
-    }
+    
 
   const evx=-1
   /*const evx =
