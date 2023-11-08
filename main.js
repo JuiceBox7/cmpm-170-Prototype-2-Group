@@ -157,20 +157,37 @@ function update() {
       return true;
     }
   });
-  if(enemy.x>player.x+1){
-    enemy.x-=.5
+  if((player.x - enemy.x) <= (player.y-enemy.y)){
+    if(enemy.x>player.x+1){
+    enemy.x-=.6
     enemy.mn=1
     }else if(enemy.x<player.x-1){
-        enemy.x+=.5
+        enemy.x+=.6
         enemy.mn=1
     }else{
       if(enemy.y>player.y){
-        enemy.y-=.5
+        enemy.y-=.6
         enemy.mn=0
     }else if(enemy.y<player.y){
-        enemy.y+=.5
+        enemy.y+=.6
         enemy.mn=0
     }
+    } 
+  }else{
+    if(enemy.y>player.y+1){
+      enemy.y-=.6
+      enemy.mn=0
+  }else if(enemy.y<player.y-1){
+      enemy.y+=.6
+      enemy.mn=0
+  }else if(enemy.x>player.x){
+    enemy.x-=.6
+    enemy.mn=1
+    }else if(enemy.x<player.x){
+        enemy.x+=.6
+        enemy.mn=1
+  }
+}
     }
 
   const evx=-1
