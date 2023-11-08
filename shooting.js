@@ -99,7 +99,7 @@ function update() {
         vel: vec(3 * sqrt(difficulty)).rotate(pa + i),
       });
     });
-    player.fireTicks = 9 / sqrt(difficulty);
+    player.fireTicks = 9 / sqrt(difficulty); // constant shooting speed
   }
   if (input.isJustReleased) {
     play("select");
@@ -108,7 +108,7 @@ function update() {
       player.va *= -1;
       player.angle += player.va * 2;
     }
-    player.fireTicks = 9 / sqrt(difficulty);
+    player.fireTicks = 9 / sqrt(difficulty); // shooting speed when switching angles
   }
   if (input.isPressed) {
     player.angle = floor(player.angle);
