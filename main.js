@@ -157,23 +157,20 @@ function update() {
       return true;
     }
   });
-    if(enemy.x>player.x){
-    /*console.log("enemy.x") 
-    console.log(enemy.x)
-    console.log("player.x")
-    console.log(player.x)
-    */
+  if(enemy.x>player.x+1){
     enemy.x-=.5
     enemy.mn=1
-    }else if(enemy.x<player.x){
+    }else if(enemy.x<player.x-1){
         enemy.x+=.5
         enemy.mn=1
-    }else if(enemy.y>player.y){
+    }else{
+      if(enemy.y>player.y){
         enemy.y-=.5
         enemy.mn=0
     }else if(enemy.y<player.y){
         enemy.y+=.5
         enemy.mn=0
+    }
     }
 
   const evx=-1
