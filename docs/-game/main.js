@@ -73,12 +73,13 @@ options = {
   //seed: 200,
 };
 
-/** @type {{x: number, vx: number, y: number, vy:number, mn:number, mn2:number, pos: Vector, angle: number, va: number, ticks: number, fireTicks: number}} */
+/** @type {{x: number, vx: number, y: number, vy:number, mn:number, mn2:number, isFiringLeft:boolean , pos: Vector, angle: number, va: number, ticks: number, fireTicks: number}} */
 let player;
 /** @type {{x: number, eyeVx: number, y: number, eyeVy: number, mn: number}} */
 let enemy;
 /** @type {{x: number, isPower: boolean}[]} */
 let dots;
+/** @typedef {{pos: Vector}} shots */
 /** @type {{pos: Vector, vel: Vector}[]} */
 let shots;
 let powerTicks;
@@ -90,7 +91,7 @@ const playerX = 20;
 
 function update() {
   if (!ticks) {
-    player = { x: 40, vx: 1, y:30, vy:1, mn:0, mn2:0, pos: vec(playerX, 50), angle: 180, va: 1, ticks: 0, fireTicks: 0 };
+    player = { x: 40, vx: 1, y:30, vy:1, mn:0, mn2:0, isFiringLeft: true, pos: vec(playerX, 50), angle: 180, va: 1, ticks: 0, fireTicks: 0 };
     enemy = { x: 100, eyeVx: 0, y:30, eyeVy: 0, mn:0};
     multiplier = 0;
     shots = [];
@@ -101,7 +102,8 @@ function update() {
 
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
-  const pc = vec(player.pos.x, player.pos.y - 9);
+  let pc = vec(player.pos.x, player.pos.y - 20);
+  //console.log("Player x: " + player.x + "\nPlayer y: " + player.y);
   player.fireTicks--;
   if (player.fireTicks < 0) {
     play("hit");
@@ -116,43 +118,48 @@ function update() {
 
   if (input.isJustReleased) {
     play("select");
-    console.log( "Player angle: " +player.angle);
-    //player.angle += player.va;
+    // ignoring start of game input
     if (player.angle == 180) {
       player.angle += 360;
+    // setting up subsequent rotations
     } else if (player.angle == 540){
       player.angle += 180
     } else {
       player.angle += 90
-      console.log( "Player angle: " + player.angle);
-      //player.va *= -1;
-      //player.angle += player.va * 2;
     }
     player.fireTicks = 9 / sqrt(difficulty);
   }
+
 
   animTicks += difficulty;
   color("black");
   text(`x${multiplier}`, 3, 9);
   if (input.isJustPressed) {
     player.angle = floor(player.angle);
-    player.mn+=1
+    player.mn += 1
+    const offset = (player.isFiringLeft)
+    ? -5
+    : 5;
     if(player.mn%4==0){
-        player.vx =1;
-        player.vy =1;
-        player.mn2=1
+        player.vx = 1;
+        player.vy = 1;
+        player.mn2 = 1
     }else if(player.mn%4==1){
-        player.vx=-1
-        player.vy=1
-        player.mn2=0
+        player.vx = -1
+        player.vy = 1
+        player.mn2 = 0
     }else if(player.mn%4==2){
-        player.vx=-1
-        player.vy=-1
-        player.mn2=1
+        player.vx = -1
+        player.vy = -1
+        player.mn2 = 1
     }else if(player.mn%4==3){
-        player.vx=1
-        player.vy=-1
-        player.mn2=0
+        player.vx = 1
+        player.vy = -1
+        player.mn2 = 0
+          shots.push({
+          pos: vec(player.pos.x + offset, player.pos.y),
+          vel: vec(3 * sqrt(difficulty)).rotate(pa + 1),
+      });
     }
   }
 
@@ -162,12 +169,13 @@ function update() {
     multiplier++;
   }
 
-  if(player.mn2==0){
+  if(player.mn2 == 0){
     player.x += player.vx * 0.5 * difficulty;
   }
-  else if(player.mn2==1){
+  else if(player.mn2 == 1){
   player.y += player.vy * 0.5 * difficulty;
   }
+  // wrapping around
   if (player.x < -3) {
     player.x = 103;
   } else if (player.x > 103) {
@@ -184,7 +192,7 @@ function update() {
   rect(0, 34, 100, 1);
   rect(0, 36, 100, 1);
   color("green");
-
+ 
   remove(shots, (s) => {
     s.pos.add(s.vel);
     s.pos.x -= scr;
@@ -218,7 +226,7 @@ function update() {
       return true;
     }
   });
-      if((player.x - enemy.x) <= (player.y-enemy.y)){
+      if((player.x - enemy.x) <= (player.y - enemy.y)){
       if(enemy.x>player.x+1){
       enemy.x-=.6
       enemy.mn=1
