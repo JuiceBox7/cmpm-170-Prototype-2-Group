@@ -118,9 +118,13 @@ function update() {
     play("select");
     console.log( "Player angle: " +player.angle);
     //player.angle += player.va;
-    if (player.angle < -1 || player.angle > 1) {
+    if (player.angle == 180) {
+      player.angle += 360;
+    } else if (player.angle == 540){
+      player.angle += 180
+    } else {
       player.angle += 90
-      console.log( "Player angle: " +player.angle);
+      console.log( "Player angle: " + player.angle);
       //player.va *= -1;
       //player.angle += player.va * 2;
     }
