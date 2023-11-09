@@ -1,10 +1,8 @@
-title = "PAKU PAKU";
+title = "SHOOTY SHOOTER";
 
 description = `
-[Tap] Turn  
+[Tap] Turn, 
 Change angle
-[Hold]
- Fire
 `;
 
 characters = [
@@ -92,7 +90,7 @@ const playerX = 20;
 
 function update() {
   if (!ticks) {
-    player = { x: 40, vx: 1, y:30, vy:1, mn:0, mn2:0, pos: vec(playerX, 50), angle: 0, va: 1, ticks: 0, fireTicks: 0 };
+    player = { x: 40, vx: 1, y:30, vy:1, mn:0, mn2:0, pos: vec(playerX, 50), angle: 180, va: 1, ticks: 0, fireTicks: 0 };
     enemy = { x: 100, eyeVx: 0, y:30, eyeVy: 0, mn:0};
     multiplier = 0;
     shots = [];
@@ -104,7 +102,6 @@ function update() {
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
   const pc = vec(player.pos.x, player.pos.y - 9);
-  let pd = false;
   player.fireTicks--;
   if (player.fireTicks < 0) {
     play("hit");
@@ -119,10 +116,13 @@ function update() {
 
   if (input.isJustReleased) {
     play("select");
-    player.angle += player.va;
+    console.log( "Player angle: " +player.angle);
+    //player.angle += player.va;
     if (player.angle < -1 || player.angle > 1) {
-      player.va *= -1;
-      player.angle += player.va * 2;
+      player.angle += 90
+      console.log( "Player angle: " +player.angle);
+      //player.va *= -1;
+      //player.angle += player.va * 2;
     }
     player.fireTicks = 9 / sqrt(difficulty);
   }
