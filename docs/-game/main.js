@@ -79,7 +79,7 @@ let player;
 let enemy;
 /** @type {{x: number, isPower: boolean}[]} */
 let dots;
-/** @typedef {{pos: Vector}} shots */
+///** @typedef {{pos: Vector}} shots */
 /** @type {{pos: Vector, vel: Vector}[]} */
 let shots;
 let powerTicks;
@@ -103,7 +103,7 @@ function update() {
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
   let pc = vec(player.pos.x, player.pos.y - 20);
-  //console.log("Player x: " + player.x + "\nPlayer y: " + player.y);
+  console.log("Player x: " + player.vx + "\nPlayer y: " + player.vy);
   player.fireTicks--;
   if (player.fireTicks < 0) {
     play("hit");
@@ -130,7 +130,6 @@ function update() {
     player.fireTicks = 9 / sqrt(difficulty);
   }
 
-
   animTicks += difficulty;
   color("black");
   text(`x${multiplier}`, 3, 9);
@@ -156,10 +155,6 @@ function update() {
         player.vx = 1
         player.vy = -1
         player.mn2 = 0
-          shots.push({
-          pos: vec(player.pos.x + offset, player.pos.y),
-          vel: vec(3 * sqrt(difficulty)).rotate(pa + 1),
-      });
     }
   }
 
@@ -192,6 +187,13 @@ function update() {
   rect(0, 34, 100, 1);
   rect(0, 36, 100, 1);
   color("green");
+
+  shots.forEach((b) => {
+    b.pos.x = player.x;
+    b.pos.y = player.y;
+    //color("yellow");
+    box(b.pos, 2);
+  });
  
   remove(shots, (s) => {
     s.pos.add(s.vel);
