@@ -91,8 +91,21 @@ const playerX = 20;
 
 function update() {
   if (!ticks) {
-    player = { x: 40, vx: 1, y:30, vy:1, mn:0, mn2:0, isFiringLeft: true, pos: vec(playerX, 50), angle: 180, va: 1, ticks: 0, fireTicks: 0 };
-    enemy = { x: 100, eyeVx: 0, y:30, eyeVy: 0, mn:0};
+    player = {
+      x: 40,
+      vx: 1,
+      y: 30,
+      vy: 1,
+      mn: 0,
+      mn2: 0,
+      isFiringLeft: true,
+      pos: vec(playerX, 50),
+      angle: 180,
+      va: 1,
+      ticks: 0,
+      fireTicks: 0,
+    };
+    enemy = { x: 100, eyeVx: 0, y: 30, eyeVy: 0, mn: 0 };
     multiplier = 0;
     shots = [];
     scrOfs = 0;
@@ -102,7 +115,7 @@ function update() {
 
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
-  let pc = vec(player.pos.x, player.pos.y - 20);
+  let pc = vec(player.pos);
   console.log("Player x: " + player.vx + "\nPlayer y: " + player.vy);
   player.fireTicks--;
   if (player.fireTicks < 0) {
@@ -121,11 +134,11 @@ function update() {
     // ignoring start of game input
     if (player.angle == 180) {
       player.angle += 360;
-    // setting up subsequent rotations
-    } else if (player.angle == 540){
-      player.angle += 180
+      // setting up subsequent rotations
+    } else if (player.angle == 540) {
+      player.angle += 180;
     } else {
-      player.angle += 90
+      player.angle += 90;
     }
     player.fireTicks = 9 / sqrt(difficulty);
   }
@@ -135,26 +148,24 @@ function update() {
   text(`x${multiplier}`, 3, 9);
   if (input.isJustPressed) {
     player.angle = floor(player.angle);
-    player.mn += 1
-    const offset = (player.isFiringLeft)
-    ? -5
-    : 5;
-    if(player.mn%4==0){
-        player.vx = 1;
-        player.vy = 1;
-        player.mn2 = 1
-    }else if(player.mn%4==1){
-        player.vx = -1
-        player.vy = 1
-        player.mn2 = 0
-    }else if(player.mn%4==2){
-        player.vx = -1
-        player.vy = -1
-        player.mn2 = 1
-    }else if(player.mn%4==3){
-        player.vx = 1
-        player.vy = -1
-        player.mn2 = 0
+    player.mn += 1;
+    const offset = player.isFiringLeft ? -5 : 5;
+    if (player.mn % 4 == 0) {
+      player.vx = 1;
+      player.vy = 1;
+      player.mn2 = 1;
+    } else if (player.mn % 4 == 1) {
+      player.vx = -1;
+      player.vy = 1;
+      player.mn2 = 0;
+    } else if (player.mn % 4 == 2) {
+      player.vx = -1;
+      player.vy = -1;
+      player.mn2 = 1;
+    } else if (player.mn % 4 == 3) {
+      player.vx = 1;
+      player.vy = -1;
+      player.mn2 = 0;
     }
   }
 
@@ -164,11 +175,10 @@ function update() {
     multiplier++;
   }
 
-  if(player.mn2 == 0){
+  if (player.mn2 == 0) {
     player.x += player.vx * 0.5 * difficulty;
-  }
-  else if(player.mn2 == 1){
-  player.y += player.vy * 0.5 * difficulty;
+  } else if (player.mn2 == 1) {
+    player.y += player.vy * 0.5 * difficulty;
   }
   // wrapping around
   if (player.x < -3) {
@@ -188,12 +198,12 @@ function update() {
   rect(0, 36, 100, 1);
   color("green");
 
-  shots.forEach((b) => {
-    b.pos.x = player.x;
-    b.pos.y = player.y;
-    //color("yellow");
-    box(b.pos, 2);
-  });
+  // shots.forEach((b) => {
+  //   b.pos.x = player.x;
+  //   b.pos.y = player.y;
+  //   //color("yellow");
+  //   box(b.pos, 2);
+  // });
  
   remove(shots, (s) => {
     s.pos.add(s.vel);
@@ -203,7 +213,6 @@ function update() {
   });
   //const fireInterval = ceil(300 / sqrt(difficulty));
   //const fireRepeatInterval = ceil(36 / sqrt(difficulty));
-
 
   const ai = floor(animTicks / 7) % 4;
   char(addWithCharCode("a", ai === 3 ? 1 : ai), player.x, player.y, {
@@ -228,40 +237,39 @@ function update() {
       return true;
     }
   });
-      if((player.x - enemy.x) <= (player.y - enemy.y)){
-      if(enemy.x>player.x+1){
-      enemy.x-=.6
-      enemy.mn=1
-      }else if(enemy.x<player.x-1){
-          enemy.x+=.6
-          enemy.mn=1
-      }else{
-        if(enemy.y>player.y){
-          enemy.y-=.6
-          enemy.mn=0
-      }else if(enemy.y<player.y){
-          enemy.y+=.6
-          enemy.mn=0
+  if (player.x - enemy.x <= player.y - enemy.y) {
+    if (enemy.x > player.x + 1) {
+      enemy.x -= 0.6;
+      enemy.mn = 1;
+    } else if (enemy.x < player.x - 1) {
+      enemy.x += 0.6;
+      enemy.mn = 1;
+    } else {
+      if (enemy.y > player.y) {
+        enemy.y -= 0.6;
+        enemy.mn = 0;
+      } else if (enemy.y < player.y) {
+        enemy.y += 0.6;
+        enemy.mn = 0;
       }
-      } 
-    }else{
-      if(enemy.y>player.y+1){
-        enemy.y-=.6
-        enemy.mn=0
-    }else if(enemy.y<player.y-1){
-        enemy.y+=.6
-        enemy.mn=0
-    }else if(enemy.x>player.x){
-      enemy.x-=.6
-      enemy.mn=1
-      }else if(enemy.x<player.x){
-          enemy.x+=.6
-          enemy.mn=1
+    }
+  } else {
+    if (enemy.y > player.y + 1) {
+      enemy.y -= 0.6;
+      enemy.mn = 0;
+    } else if (enemy.y < player.y - 1) {
+      enemy.y += 0.6;
+      enemy.mn = 0;
+    } else if (enemy.x > player.x) {
+      enemy.x -= 0.6;
+      enemy.mn = 1;
+    } else if (enemy.x < player.x) {
+      enemy.x += 0.6;
+      enemy.mn = 1;
     }
   }
-    
 
-  const evx=-1
+  const evx = -1;
   /*const evx =
     enemy.eyeVx !== 0
       ? enemy.eyeVx
@@ -275,23 +283,21 @@ function update() {
     100
   );*/
 
-  color(
-      "red"
-  );
+  color("red");
   const c = char(
     enemy.eyeVx !== 0 ? "h" : addWithCharCode("d", floor(animTicks / 7) % 2),
     enemy.x,
     enemy.y
-    
+
     //{
-      // @ts-ignore
-      //mirror: { x: evx },
+    // @ts-ignore
+    //mirror: { x: evx },
     //}
   ).isColliding.char;
-    if(c.a){
-        play("explosion")
-        end()
-    }
+  if (c.a) {
+    play("explosion");
+    end();
+  }
   powerTicks -= difficulty;
   if (dots.length === 0) {
     play("coin");
