@@ -7,42 +7,40 @@ Change angle
 
 characters = [
   `
-  llll
- lll
-lll
-lll
- lll
-  llll
+ lllyl
+bbblyl
+bbblyl
+bbblyl
+bbblyl
+ lllyl
 `,
   `
-  lll
- lllll
-lll
-lll
- lllll
-  lll
+ lllyl
+ bbbyl
+ bbbyl
+ bbbyl
+ bbbyl
+ lllyl
 `,
   `
-  ll
- llll
+ lllyl
+  bbbl
+  bbbl
+  bbbl
+  bbbl
+ lllyl
+`,
+  `
+l bb l
+ll  ll 
 llllll
+ llll
+`,
+  `
+  bb
+ll  ll 
 llllll
  llll
-  ll
-`,
-  `
-  lllll
-  l l l
- lllllll
-lllllllll
-`,
-  `
-  lll
- l l l
- llll
- llll
- llll
- l l
 `,
   `
 ll
@@ -64,7 +62,7 @@ llll
 
 options = {
   theme: "dark",
-  viewSize: { x: 100, y: 50 },
+  viewSize: { x: 100, y: 100 },
   isPlayingBgm: true,
   isReplayEnabled: true,
   isDrawingParticleFront: true,
@@ -87,19 +85,20 @@ let animTicks;
 let multiplier;
 let nextEnemyTicks;
 let scrOfs;
+let spin = 0;
 const playerX = 20;
 
 function update() {
   if (!ticks) {
     player = {
-      x: 40,
+      x: 50,
       vx: 1,
-      y: 30,
+      y: 50,
       vy: 1,
       mn: 0,
       mn2: 0,
       isFiringLeft: true,
-      pos: vec(playerX, 50),
+      pos: vec(50, 50),
       angle: 180,
       va: 1,
       ticks: 0,
@@ -129,16 +128,21 @@ function update() {
     player.fireTicks = 9 / sqrt(difficulty);
   }
 
+  console.log("angle: " + player.angle);
   if (input.isJustReleased) {
     play("select");
     // ignoring start of game input
     if (player.angle == 180) {
       player.angle += 360;
+      spin = 0;
       // setting up subsequent rotations
-    } else if (player.angle == 540) {
-      player.angle += 180;
     } else {
       player.angle += 90;
+      if(spin != 4){
+        spin += 1;
+      } else {
+        spin = 1;
+      }
     }
     player.fireTicks = 9 / sqrt(difficulty);
   }
@@ -176,27 +180,27 @@ function update() {
   }
 
   if (player.mn2 == 0) {
-    player.x += player.vx * 0.5 * difficulty;
+    //player.x += player.vx * 0.5 * difficulty;
   } else if (player.mn2 == 1) {
-    player.y += player.vy * 0.5 * difficulty;
+    //player.y += player.vy * 0.5 * difficulty;
   }
   // wrapping around
   if (player.x < -3) {
-    player.x = 103;
+   // player.x = 103;
   } else if (player.x > 103) {
-    player.x = -3;
+    //player.x = -3;
   }
   if (player.y < -3) {
-    player.y = 55;
+    //player.y = 55;
   } else if (player.y > 55) {
-    player.y = -3;
+    //player.y = -3;
   }
-  color("blue");
+  //color("blue");
   rect(0, 23, 100, 1);
   rect(0, 25, 100, 1);
   rect(0, 34, 100, 1);
   rect(0, 36, 100, 1);
-  color("green");
+  //color("yellow");
 
   // shots.forEach((b) => {
   //   b.pos.x = player.x;
@@ -204,7 +208,6 @@ function update() {
   //   //color("yellow");
   //   box(b.pos, 2);
   // });
- 
   remove(shots, (s) => {
     s.pos.add(s.vel);
     s.pos.x -= scr;
@@ -217,8 +220,12 @@ function update() {
   const ai = floor(animTicks / 7) % 4;
   char(addWithCharCode("a", ai === 3 ? 1 : ai), player.x, player.y, {
     // @ts-ignore
-    mirror: { x: player.vx },
+    rotation: spin
   });
+
+  /*char(addWithCharCode("a", c.color), cp, {
+      rotation: c.angle + (c.phase < 1 ? 2 : 0),
+    });*/
   remove(dots, (d) => {
     color(
       d.isPower && floor(animTicks / 7) % 2 === 0 ? "transparent" : "yellow"
@@ -283,7 +290,7 @@ function update() {
     100
   );*/
 
-  color("red");
+  //color("red");
   const c = char(
     enemy.eyeVx !== 0 ? "h" : addWithCharCode("d", floor(animTicks / 7) % 2),
     enemy.x,
