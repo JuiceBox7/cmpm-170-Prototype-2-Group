@@ -253,13 +253,25 @@ function update() {
   const enemyIsCollidingWithShot = c.isColliding.rect.cyan
   if (enemyIsCollidingWithShot) {
     play("synth");
-    let decider = floor(rnd(0, 2));
+    let decider = floor(rnd(0, 6));
     if(decider == 0){
-      height = 0;
+      height = 5;
       width = 30;
-    } else {
+    } else if (decider == 1) {
       height = 100;
       width = 30;
+    } else if (decider == 2){
+      height = 5;
+      width = 50;
+    } else if (decider == 3){
+      height = 100;
+      width = 50;
+    } else if (decider == 4){
+      height = 5;
+      width = 90;
+    } else {
+      height = 100;
+      width = 90;
     }
     enemy = { x: height, eyeVx: 0, y: width, eyeVy: 0, mn: 0};
     addScore(1);
