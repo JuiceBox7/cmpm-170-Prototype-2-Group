@@ -77,8 +77,8 @@ let player;
 let enemy;
 /** @type {{x: number, isPower: boolean}[]} */
 let dots;
-///** @typedef {{pos: Vector}} shots */
-/** @type {{pos: Vector, vel: Vector}[]} */
+/** @typedef {{pos: Vector, vel: Vector}} Shot */
+/** @type {Shot[]} */
 let shots;
 let powerTicks;
 let animTicks;
@@ -208,16 +208,17 @@ function update() {
   //   //color("yellow");
   //   box(b.pos, 2);
   // });
-  remove(shots, (s) => {
+  shots.forEach((s) => {
     s.pos.add(s.vel);
     s.pos.x -= scr;
+    color("cyan");
     bar(s.pos, 3, 3, s.vel.angle);
-    return !s.pos.isInRect(-3, -3, 106, 106);
   });
   //const fireInterval = ceil(300 / sqrt(difficulty));
   //const fireRepeatInterval = ceil(36 / sqrt(difficulty));
 
   const ai = floor(animTicks / 7) % 4;
+  color("black");
   char(addWithCharCode("a", ai === 3 ? 1 : ai), player.x, player.y, {
     // @ts-ignore
     rotation: spin
@@ -300,11 +301,26 @@ function update() {
     // @ts-ignore
     //mirror: { x: evx },
     //}
-  ).isColliding.char;
-  if (c.a) {
+  )
+  const enemyIsCollidingWithMainChar = c.isColliding.char.a;
+  if (enemyIsCollidingWithMainChar) {
     play("explosion");
     end();
   }
+
+  const enemyIsCollidingWithShot = c.isColliding.rect.cyan
+  if (enemyIsCollidingWithShot) {
+    play("synth");
+    enemy = { x: 100, eyeVx: 0, y: 30, eyeVy: 0, mn: 0 };
+  }
+
+  remove(shots, (s) => {
+    color("cyan");
+    const shot = bar(s.pos, 3, 3, s.vel.angle)
+    const shotIsCollidingWithEnemy = shot.isColliding.char.h || shot.isColliding.char.d;
+    return shotIsCollidingWithEnemy || !s.pos.isInRect(-3, -3, 106, 106);
+  });
+
   powerTicks -= difficulty;
   if (dots.length === 0) {
     play("coin");
