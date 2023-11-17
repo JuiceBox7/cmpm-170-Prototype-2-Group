@@ -86,6 +86,8 @@ let multiplier;
 let nextEnemyTicks;
 let scrOfs;
 let spin = 0;
+let angle;
+let stars;
 const playerX = 20;
 
 function update() {
@@ -110,7 +112,16 @@ function update() {
     scrOfs = 0;
     addDots();
     powerTicks = animTicks = 0;
+    angle = 0;
+    stars = times(50, (_) => ({ dist: rnd(10, 70), angle: rnd(PI * 2) }));
   }
+
+  color("light_black");
+  const sp = vec();
+  stars.forEach((s) => {
+    sp.set(50, 50).addWithAngle(s.angle - angle, s.dist);
+    box(sp, 1);
+  });
 
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
