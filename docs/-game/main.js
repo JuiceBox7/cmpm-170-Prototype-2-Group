@@ -123,7 +123,7 @@ function update() {
   let scr = 0;
   const pa = (floor(player.angle) * PI) / 4;
   let pc = player.pos;
-  console.log("Player x: " + player.vx + "\nPlayer y: " + player.vy);
+  //console.log("Player x: " + player.vx + "\nPlayer y: " + player.vy);
   player.fireTicks--;
   if (player.fireTicks < 0) {
     play("hit");
@@ -136,7 +136,7 @@ function update() {
     player.fireTicks = 9 / sqrt(difficulty);
   }
 
-  console.log("angle: " + player.angle);
+  //console.log("angle: " + player.angle);
   if (input.isJustReleased) {
     play("select");
     // ignoring start of game input
@@ -196,7 +196,7 @@ function update() {
     rotation: spin
   });
 
-  console.log("enemy x: " + enemy.x);
+  //console.log("enemy x: " + enemy.x);
   console.log("enemy y: " + enemy.y);
 
   if (player.x - enemy.x <= player.y - enemy.y) {
@@ -253,7 +253,7 @@ function update() {
   const enemyIsCollidingWithShot = c.isColliding.rect.cyan
   if (enemyIsCollidingWithShot) {
     play("synth");
-    let decider = floor(rnd(0, 6));
+    let decider = floor(rnd(0, 9));
     if(decider == 0){
       height = 5;
       width = 30;
@@ -269,9 +269,21 @@ function update() {
     } else if (decider == 4){
       height = 5;
       width = 90;
+    } else if (decider == 5){
+      height = 50;
+      width = 100;
+    } else if (decider == 6){
+      height = 35;
+      width = 110;
+    } else if (decider == 7){
+      height = 80;
+      width = 20;
+    } else if (decider == 8){
+      height = 10;
+      width = 50;
     } else {
-      height = 100;
-      width = 90;
+      height = 50;
+      width = 10;
     }
     enemy = { x: height, eyeVx: 0, y: width, eyeVy: 0, mn: 0};
     addScore(1);
