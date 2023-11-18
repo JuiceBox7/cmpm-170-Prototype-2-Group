@@ -146,7 +146,7 @@ function update() {
       // setting up subsequent rotations
     } else {
       player.angle += 90;
-      if(spin != 4){
+      if (spin != 4) {
         spin += 1;
       } else {
         spin = 1;
@@ -182,6 +182,33 @@ function update() {
 
   scrOfs += scr;
 
+  color("black");
+  particle(100, 30, 1);
+  particle(5, 30, 1);
+  particle(5, 50, 1);
+  particle(100, 50, 1);
+  particle(5, 90, 1);
+  particle(50, 100, 1);
+  particle(80, 20, 1);
+  particle(10, 50, 1);
+  particle(50, 10, 1);
+
+  color("red");
+  rect(55, 25, 45, 1);
+  rect(55, 34, 45, 1);
+  rect(45, 1, 1, 45);
+  rect(55, 34, 1, 12.5);
+  rect(55, 16, 85, 1);
+  rect(55, 1, 1, 15);
+  rect(55, 45, 50, 1);
+  rect(55, 54, 50, 1);
+  rect(55, 54, 1, 60);
+  rect(45, 54, 1, 60);
+  rect(10, 54, 1, 60);
+  rect(10, 54, 35, 1);
+  rect(10, 1, 1, 45);
+  rect(10, 45, 35, 1);
+
   shots.forEach((s) => {
     s.pos.add(s.vel);
     s.pos.x -= scr;
@@ -193,7 +220,7 @@ function update() {
   color("black");
   char(addWithCharCode("a", ai === 3 ? 1 : ai), player.x, player.y, {
     // @ts-ignore
-    rotation: spin
+    rotation: spin,
   });
 
   //console.log("enemy x: " + enemy.x);
@@ -241,61 +268,74 @@ function update() {
     // @ts-ignore
     //mirror: { x: evx },
     //}
-  )
+  );
   const enemyIsCollidingWithMainChar = c.isColliding.char.a;
   if (enemyIsCollidingWithMainChar) {
     play("explosion");
     end();
   }
 
- 
-
-  const enemyIsCollidingWithShot = c.isColliding.rect.cyan
+  const enemyIsCollidingWithShot = c.isColliding.rect.cyan;
   if (enemyIsCollidingWithShot) {
     play("synth");
-    let decider = floor(rnd(0, 9));
-    if(decider == 0){
+    let decider = floor(rnd(0, 8));
+    if (decider == 0) {
       height = 5;
       width = 30;
+      color("yellow");
+      particle(5, 30, 10);
     } else if (decider == 1) {
       height = 100;
       width = 30;
-    } else if (decider == 2){
+      color("yellow");
+      particle(100, 30, 10);
+    } else if (decider == 2) {
       height = 5;
       width = 50;
-    } else if (decider == 3){
+      color("yellow");
+      particle(5, 50, 10);
+    } else if (decider == 3) {
       height = 100;
       width = 50;
-    } else if (decider == 4){
+      color("yellow");
+      particle(100, 50, 10);
+    } else if (decider == 4) {
       height = 5;
       width = 90;
-    } else if (decider == 5){
+      color("yellow");
+      particle(5, 90, 10);
+    } else if (decider == 5) {
       height = 50;
       width = 100;
-    } else if (decider == 6){
-      height = 35;
-      width = 110;
-    } else if (decider == 7){
+      color("yellow");
+      particle(50, 100, 10);
+    } else if (decider == 6) {
       height = 80;
       width = 20;
-    } else if (decider == 8){
+      color("yellow");
+      particle(80, 20, 10);
+    } else if (decider == 7) {
       height = 10;
       width = 50;
+      color("yellow");
+      particle(10, 50, 10);
     } else {
       height = 50;
       width = 10;
+      color("yellow");
+      particle(50, 10, 10);
     }
-    enemy = { x: height, eyeVx: 0, y: width, eyeVy: 0, mn: 0};
+    enemy = { x: height, eyeVx: 0, y: width, eyeVy: 0, mn: 0 };
     addScore(1);
   }
 
   remove(shots, (s) => {
     color("cyan");
-    const shot = bar(s.pos, 2, 2, s.vel.angle)
-    const shotIsCollidingWithEnemy = shot.isColliding.char.h || shot.isColliding.char.d;
+    const shot = bar(s.pos, 2, 2, s.vel.angle);
+    const shotIsCollidingWithEnemy =
+      shot.isColliding.char.h || shot.isColliding.char.d;
     return shotIsCollidingWithEnemy || !s.pos.isInRect(-3, -3, 106, 106);
   });
 
   powerTicks -= difficulty;
-
 }
